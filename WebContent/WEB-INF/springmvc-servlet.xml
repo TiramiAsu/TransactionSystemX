@@ -21,6 +21,31 @@
 		http://www.springframework.org/schema/mvc
 		http://www.springframework.org/schema/mvc/spring-mvc.xsd">
 
+	<!-- SpringMVC -->
+	<context:annotation-config />
+	<mvc:annotation-driven conversion-service="conversionService" />
+	<tx:annotation-driven />
+
 	<!-- Test -->
 	<context:component-scan base-package="stocksys.test"/>
+
+	<!-- 自定converter與formatter -->
+	<bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
+		<property name="formatters">
+			<set><!-- 透過@註釋配置 --></set>
+		</property>
+	</bean>
+
+	<!-- JPA -->
+	<jpa:repositories base-package="stocksys.test.dao"></jpa:repositories>
+
+	<bean class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor" />
+
+	<bean class="org.springframework.orm.jpa.LocalEntityManagerFactoryBean" id="entityManagerFactory">
+		<property name="persistenceUnitName" value="p1"/>
+	</bean>
+
+	<bean class="org.springframework.orm.jpa.JpaTransactionManager" id="transactionManager">
+		<property name="entityManagerFactory" ref="entityManagerFactory"/>
+	</bean>
 </beans>
